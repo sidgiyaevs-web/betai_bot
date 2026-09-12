@@ -1,5 +1,5 @@
 
-l# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # BET AI — Telegram bot для прогнозов на спорт
 
 import asyncio
