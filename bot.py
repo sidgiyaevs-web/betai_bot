@@ -80,7 +80,24 @@ async def cmd_play(message: Message):
         "🎮 Нажми кнопку ниже, чтобы открыть игру:",
         reply_markup=main_menu_kb()
     )
-
+@dp.message(Command("give"))
+async def cmd_give(message: Message):
+    user = message.from_user
+    db.get_or_create_user(user.id, user.username or "", user.first_name or "")
+    try:
+        parts = message.text.split()
+        amount = int(parts[1]) if len(parts) > 1 else 1000
+    except:
+        amount = 1000
+    if amount > 1000000:
+        amount = 1000000
+    db.update_balance(user.id, stars_delta=amount)
+    fresh = db.get_user(user.id)
+    await message.answer(
+        f"✅ Выдано <b>{amount} ⭐</b>\n\n"
+        f"💰 Твой баланс: <b>{fresh['stars']} ⭐</b>",
+        reply_markup=main_menu_kb()
+    )
 
 @dp.callback_query(F.data == "profile")
 async def cb_profile(callback):
